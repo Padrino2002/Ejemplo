@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Zapata Aislada</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        $(document).on("ready",function(){
+            $("#lbOpciones").change(function(){
+                var seleccion=$("#lbOpciones option:selected").val();
+                var dos=parseFloat(seleccion)+ parseFloat(3.1)
+                $("#Id").text("Pmin="+ dos);
+                var Mu=$("#Mu").val();
+                alert(seleccion)
+            })
+            $("#idOpcionesVarillas").change(function(){
+                Asmin=$("#idOpcionesVarillas option:selected").val();
+                b=$("#Idb").val();
+                d=$("#Idd").val();
+                pminn=$("#IdPmin").text();
+                r=parseFloat(pminn)*parseFloat(b) *parseFloat(d)
+                r=r/parseFloat(Asmin) 
+                $("#IdAcero").text(Math.round(r.toFixed(2)) )
+                $("#IdArmaUno").prop("checked",false)
+                /*alert(b +"--" +d)*/
+            })  
+        })
+    </script>
+</head>
+<body>
+    <div><img src=".\imagenes\Zapata.JPG" style="height: 400px">
+    </div>
+    <div id=seccion1 class="ElementosMecanicos">
+        <a>Pu=</a>
+        <input type="text" id="Pu" style="width: 50px; background-color: yellow"  value=207.93 oninput="fPresiones();"><a>   Ton</a> <p></p>
+        <a>Mx=</a>
+        <input type="text" id="Mx" style="width: 50px; background-color: yellow" value=10.359><a>   Ton/m2</a> <p></p>       
+        <a>My=</a>
+        <input type="text" id="My" style="width: 50px; background-color: yellow" value=10.918><a>   Ton/m2</a> <p></p>
+    </div>
+    <div id=Seccion2 class="Geometria">
+        <a>A=</a>
+        <input type="text" id="IdA" style="width: 50px" value=50 oninput="farea();"><a>   m</a> <p></p>        
+        <a>B=</a>
+        <input type="text" id="IdB" style="width: 50px" value=25 oninput="farea();"><a>   m</a> <p></p>
+        <a>a<sub>1</sub>=</a>
+        <input type="text" id="Ida1" style="width: 50px;" value=25><a>  cm</a> <p></p>
+        <a>b<sub>1</sub>=</a>
+        <input type="text" id="Idb1" style="width: 50px;" value=25><a>  cm</a> <p></p>
+        <a>X=</a>
+        <input type="text" id="IdX" style="width: 50px;" value=0><a>  cm</a> <p></p>
+        <a>Y=</a>
+        <input type="text" id="IdY" style="width: 50px;" value=0><a>  cm</a> <p></p>              
+        <button type="button" id="IdBtn" onclick="fInercias();">Calcula</button> <p></p>
+    </div>
+    <div id=Seccion3 class="PropMecanicas">
+        <a>Q <sub>adm</sub>=</a>
+        <input type="text" id="Qadm" value="120" style="width: 150px" oninput="fPresiones();"><a>   Kg/cm2</a> <p></p>
+        <a>fy=</a>
+        <input type="text" id="fy" oninput="suma();" value="4200" style="width: 50px" ><a>   Kg/cm2</a> <p></p>
+        <a>A=</a>
+        <label id="IdArea"></label> <a>cm<sup>2</sup></a> <p></p>
+        <a>I<sub>x</sub>=</a> 
+        <label id="IdIx"> </label><a>  cm<sup>4</sup> </a> <p></p>
+        <a>I;<sub>y</sub>=</a> 
+        <label id="IdIy"></label> cm<sup>4</sup> </a> <p></p>
+        <a>PRESIONES DE CONTACTO</a> <p></p>
+        <a>q<sub>1</sub>=</a>
+        <label id="idq1"></label> ton/m<sup>2</sup><p></p>
+        <a>q<sub>2</sub>=</a>
+        <label id="idq2"></label> ton/m<sup>2</sup><p></p>
+        <a>q<sub>3</sub>=</a>
+        <label id="idq3"></label> ton/m<sup>2</sup><p></p>
+        <a>q<sub>4</sub>=</a>
+        <label id="idq4"></label> ton/m<sup>2</sup><p></p>
+        <a>q<sub>max</sub>=</a>
+        <label id="idqmax"></label> ton/m<sup>2</sup><p></p>
+        <a>q<sub>min</sub>=</a>
+        <label id="idqmin"></label> ton/m<sup>2</sup><p></p>
+        <label id="IdTensiones" ></label><p></p>
+        <label id="IdRevQadm"></label><p></p>
+        <div>ESFUERZOS A X e Y DISTANCIA DEL ORIGEN
+            <p></p>
+            <a>q<sub>a</sub>=</a>
+            <label id="idqa"></label> ton/m<sup>2</sup><p></p>
+            <a>q<sub>b</sub>=</a>
+            <label id="idqb"></label> ton/m<sup>2</sup><p></p>
+            <a>q<sub>c</sub>=</a>
+            <label id="idqc"></label> ton/m<sup>2</sup><p></p>
+            <a>q<sub>d</sub>=</a>
+            <label id="idqd"></label> ton/m<sup>2</sup><p></p>
+        </div>
+
+        <a>Zona Sismica</a><input id="IdSismicidad" type="checkbox" onchange="Pmax();"><p></p>
+    </div>
+    <div id="Seccion4" class="Resultados">
+        <a id="Idpmin">Pmin=</a><label id="IdPmin"> 0.00 </label> <p> </p>
+        <a id="IdPball">Pbal=</a><label id="IdPbal" > 0.00 </label> <p> </p>
+        <a id="IdPmaxx">Pmax=</a><label id="IdPmax"> 0.00 </label> <p> </p>
+        <a id="VarUnoTxt">Armar al 1%</a><input id="IdArmaUno" type="checkbox" onchange="ArmarUno();"><p></p>
+    </div id="Seccion5" class="Varilla"> 
+        <div id="idOpcionesVarillas" onchange="Aceros()">Usar Varillas de:  
+            <select>
+                <option value=0.71> #3</option>
+                <option value=1.27> #4</option>
+                <option value=1.98> #5</option>
+                <option value=2.86> #6</option>
+                <option value=5.07> #8</option>
+                <option value=7.91> #10</option>
+                <option value=11.4> #12</option>
+            </select>
+        </div>
+    <div>
+    <label id="IdAcero"> 5 </label> <a id="IdAcero"> Varillas</a><p> </p>
+    </div>
+    
+    <div>
+        <div id="lbOpciones">
+            <select style="width:160px;height:50px">
+                <option value=0.7>  Cortante FR=0.7 </option>
+                <option value=0.8>  Aplastamiento FR=0.8 </option>
+                <option value=0.9>  Felxion FR=0.9  </option>        
+            </select>
+        </div>
+        <div>
+            <input id="checkbox" type="checkbox" value="1"> check 1 <tr><tr>
+            <input id="checkbox" type="checkbox" value="1"> check 2 <br><br>
+        </div>
+        <div id="Radios" class="opciones" >
+            <input id="op1" type="radio" name="opciones" value="A"> Opcion A <br><br>
+            <input id="op1" type="radio" name="opciones" value="B"> Opcion B
+        </div>
+        <input type="text" id="txt1">
+        <fieldset>
+            <input type="text">
+            <input type="button">
+        </fieldset>
+    </div>
+    <input type="text" id="ee">  
+</body>
+<script>
+function suma(){
+    $("#IdArmaUno").prop("checked",false)
+    fcc();
+    fccc();
+    Beta();
+    Pmin();
+    $("#IdSismicidad").prop("checked",false) 
+    Pbal(); 
+    Pmax();
+    Aceros();
+}
+function Pmin(){
+    var r=0
+    fc=$("#fc").val();
+    fy=$("#fy").val();
+    rr=(0.7*Math.sqrt(fc))/fy
+    $("#IdPmin").text(rr.toFixed(6)); 
+}   
+function Pbal(){
+    /*$("#Pmax").text("Pmax="+ rr.toFixed(6));*/
+    /*EsSismico=$('#IdSismicidad').val();*/
+
+    fc=$("#fc").val();
+    fcca=$("#Idfcc").text();
+    fy=$("#fy").val();
+    BB=((6000*parseFloat($('#Idbeta1').text())))/(6000+parseFloat(fy));
+    AA=parseFloat(fcca)/parseFloat(fy);
+    BB=AA*BB;
+    $("#IdPbal").text(BB.toFixed(7));
+}
+function Pmax(){
+    pb=parseFloat($("#IdPbal").text());
+    $("#IdPmax").text((pb*0.90).toFixed(7))
+    $("#IdSismicidad").on( 'change', function() {
+    if( $(this).is(':checked') ) {
+        // Hacer algo si el checkbox ha sido seleccionado
+        $("#IdPmax").text((pb*0.75).toFixed(7))
+    } else {
+        // Hacer algo si el checkbox ha sido deseleccionado
+        $("#IdPmax").text((pb*0.90).toFixed(7))
+    }
+});
+}
+function fcc(){
+    fc=$("#fc").val();
+    fac=0.8* parseFloat(fc)
+    $("#Idfac").text(" "+fac.toFixed(3))
+    /*alert("fcc funcion")*/
+}
+function fccc(){
+    fac=$("#Idfac").text();
+    r=parseFloat(fac)*0.85;
+    $("#Idfcc").text( r.toFixed(3))
+}
+function Beta(){
+    fc=$('#fc').val();
+    fac=$('#Idfac').text();
+    if (fc<=280){
+        Betas=0.85;
+        $("#Idbeta1").text(Betas);
+    }else{
+        r=fac/1400;
+        r=1.05-r;
+        Betas=1.05-(r);
+        $("#Idbeta1").text(r.toFixed(3))
+    }
+}
+function Aceros(){
+    Asmin=$("#idOpcionesVarillas option:selected").val();
+    b=$("#Idb").val();
+    d=$("#Idd").val();
+    pminn=$("#IdPmin").text();
+    r=parseFloat(pminn)*parseFloat(b) *parseFloat(d)
+    r=r/parseFloat(Asmin) 
+    $("#IdAcero").text(Math.round(r.toFixed(2)) )
+}
+function ArmarUno(){
+    $("#IdArmaUno").on( 'change', function() {
+    if( $("#IdArmaUno").is(':checked') ) {
+            // Hacer algo si el checkbox ha sido seleccionado
+            Asmin=$("#idOpcionesVarillas option:selected").val();
+            b=$("#Idb").val();
+            d=$("#Idd").val();
+            r=0.01*parseFloat(b) *parseFloat(d)
+            r=r/parseFloat(Asmin) 
+            $("#IdAcero").text(Math.round(r.toFixed(2)) )
+    } else {
+            // Hacer algo si el checkbox ha sido deseleccionado
+            Aceros();
+    }
+}); 
+}
+function farea(){
+    A=$("#IdA").val();
+    B=$("#IdB").val();
+    Area=parseFloat(A)*parseFloat(B);
+    $("#IdArea").text(Area.toFixed(2));
+    fInercias();
+    fPresiones();
+}
+function fInercias(){
+    A=$("#IdA").val();
+    B=$("#IdB").val();
+    Ix=((parseFloat(A))*Math.pow(parseFloat(B),3))/12;
+    Iy=((parseFloat(B))*Math.pow(parseFloat(A),3))/12;
+    $("#IdIx").text(Ix.toFixed(2));
+    $("#IdIy").text(Iy.toFixed(2));
+    fPresiones();
+}
+function fPresiones(){
+    A=parseFloat($("#IdA").val());
+    B=parseFloat($("#IdB").val());   
+    Pu=parseFloat($("#Pu").val());
+    Area=parseFloat($("#IdArea").text());
+    Ix=parseFloat($("#IdIx").text());
+    Mx=parseFloat($("#Mx").val());
+    Iy=parseFloat($("#IdIy").text());
+    My=parseFloat($("#My").val());
+    qadm=parseFloat($("#Qadm").val());
+    X=parseFloat($("#IdX").val());
+    Y=parseFloat($("#IdY").val());
+    AA=Pu/Area;
+    bb=(A/2);
+    cc=(-A/2);
+    dd=(Pu/Area)+((My/Iy)*(-A/2)+(Mx/Ix*(B/2)));
+    ee=B/2
+    q1=(Pu/Area)+((My/Iy)*(-A/2)+(Mx/Ix*(B/2)));
+    q2=(Pu/Area)+((My/Iy)*(A/2)+(Mx/Ix*(B/2)));
+    q3=(Pu/Area)+((My/Iy)*(-A/2)+(Mx/Ix*(-B/2)));
+    q4=(Pu/Area)+((My/Iy)*(A/2)+(Mx/Ix*(-B/2)));
+    $("#idq1").text(q1.toFixed(2));
+    $("#idq2").text(q2.toFixed(2));
+    $("#idq3").text(q3.toFixed(2));
+    $("#idq4").text(q4.toFixed(2));
+    max=Math.max(q1,q2,q3,q4);
+    min=Math.min(q1,q2,q3,q4);
+    $("#idqmax").text(max.toFixed(2));
+    $("#idqmin").text(min.toFixed(2));
+
+    if (min>0){
+        $("#IdTensiones").text("OK, NO HAY TENSIONES");
+        /* style="color:#FF0000"*/
+    }else{
+        $("#IdTensiones").text("HAY TENSIONES");
+    }
+    if (qadm>max ){
+        $("#IdRevQadm").text("OK, LA CAPACIDAD DE CARGA ES ADECUADA " + (max/qadm).toFixed(2));
+    }else{
+        $("#IdRevQadm").text("SE EXCEDE LA CAPACIDAD DE CARGA, AUMENTAR LAS DIMENSIONES  " + (max/qadm).toFixed(2));
+    }   
+    qa=(Pu/Area)+((Mx/Ix)*(Y)+(My/Iy*(-A/2)));
+    qb=(Pu/Area)+((Mx/Ix)*(Y)+(My/Iy*(A/2)));
+    qc=(Pu/Area)+((Mx/Ix)*(B/2)+(My/Iy*(X)));
+    qd=(Pu/Area)-((Mx/Ix)*(B/2)+(My/Iy*(X)));
+    $("#idqa").text(qa.toFixed(2));
+    $("#idqb").text(qb.toFixed(2));
+    $("#idqc").text(qc.toFixed(2));
+    $("#idqd").text(qd.toFixed(2));      
+}
+function im(){
+    alert('imput')
+} 
+</script>
+</html>
