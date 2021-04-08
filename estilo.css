@@ -1,5 +1,46 @@
 .Geometria {
     color:red;
     font-family: 'Dela Gothic One', cursive;
-    background-color:#69c;
+}
+.Geometria input:hover {
+    color:white;
+    background-color: gray;
+
+}
+.tooltip{
+    font-weight:normal;
+    /*color: #3c48e5;*/
+    text-decoration:none;
+    position:relative;
+}
+.tooltip:hover{
+    text-decoration: underline;
+}
+.tooltip-box{
+    display:none;
+    position:absolute;
+    background-color:gray;
+    line-height: 16px;
+    z-index: 300;
+    text-align:center;
+    color:black;
+    font-size:12px;
+    padding:5px 10px;
+    border-radius:5px;
+    left:0;
+    bottom:30px;
+}
+.tooltip:hover .tooltip-box{
+    display: inline-block;
+}
+.tooltip-box::after{
+    content:"";
+    display:block;
+    border-top:10px solid gray;
+    border-left:10px solid transparent;
+    border-right:10px solid transparent;
+    position:absolute;
+    bottom:-7px;
+    left:calc(50%-7px);
+
 }
